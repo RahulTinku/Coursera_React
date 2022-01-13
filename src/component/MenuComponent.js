@@ -29,7 +29,7 @@ class Menu extends Component {
           <CardImg top width="100%" src={dish.image} alt={dish.name}></CardImg>
           <CardBody>
             <CardTitle>{dish.name}</CardTitle>
-            <CardText>{dish.descrption}</CardText>
+            <CardText>{dish.description}</CardText>
           </CardBody>
         </Card>
       );
@@ -57,7 +57,6 @@ class Menu extends Component {
         <div className="row">{menu}</div>
         <div className="row">
           <div className="col-12 col-md-5 m-1">
-            {' '}
             {this.renderDish(this.state.selectedDish)}
           </div>
         </div>
