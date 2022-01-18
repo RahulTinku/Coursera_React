@@ -9,14 +9,10 @@ import {
   BreadcrumbItem,
   Button,
   Row,
-  Col,
   Label,
   Modal,
   ModalBody,
   ModalHeader,
-  Form,
-  FormGroup,
-  Input,
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
@@ -29,7 +25,7 @@ const isNumber = (val) => !isNaN(Number(val));
 const validEmail = (val) =>
   /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val);
 
-function RenderComments({ comments }) {
+function RenderComments({ comments, addComment, dishId }) {
   const allComments = comments.map((comment) => {
     return (
       <li>
@@ -52,7 +48,7 @@ function RenderComments({ comments }) {
     <div>
       <h4>Comments</h4>
       <ul className="list-unstyled">{allComments}</ul>
-      <CommentForm />
+      <CommentForm dishId={dishId} addComment={addComment} />
     </div>
   );
 }
@@ -64,6 +60,7 @@ class CommentForm extends Component {
       isModalOpen: false,
     };
     this.toggleModal = this.toggleModal.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   toggleModal() {
@@ -72,6 +69,15 @@ class CommentForm extends Component {
     });
   }
 
+  handleSubmit(values) {
+    this.toggleModal();
+    this.props.addComment(
+      this.props.dishId,
+      values.rating,
+      values.author,
+      values.comment
+    );
+  }
   render() {
     return (
       <div className="container">
@@ -82,7 +88,7 @@ class CommentForm extends Component {
           <ModalHeader toggle={this.toggleModal}>Submit Comment</ModalHeader>
 
           <ModalBody>
-            <LocalForm onSubmit={this.handleLogin}>
+            <LocalForm onSubmit={(values) => this.handleSubmit(values)}>
               <Row md={{ size: 6, offset: 2 }}>
                 <div className="form-check">
                   <Label>
@@ -92,8 +98,8 @@ class CommentForm extends Component {
               </Row>
               <Row md={{ size: 3, offset: 1 }} className="mr-1 ml-1">
                 <Control.select
-                  model=".contactType"
-                  name="contactType"
+                  model=".rating"
+                  name="rating"
                   className="form-control"
                 >
                   <option>1</option>
@@ -114,9 +120,9 @@ class CommentForm extends Component {
               </Row>
               <Row md={10} className="mr-1 ml-1">
                 <Control.text
-                  model=".firstname"
-                  id="firstname"
-                  name="firstname"
+                  model=".author"
+                  id="author"
+                  name="author"
                   placeholder="Your name"
                   className="form-control"
                   validators={{
@@ -127,7 +133,7 @@ class CommentForm extends Component {
                 />
                 <Errors
                   className="text-danger"
-                  model=".firstname"
+                  model=".author"
                   show="touched"
                   messages={{
                     required: 'Required',
@@ -136,14 +142,14 @@ class CommentForm extends Component {
                   }}
                 />
               </Row>
-              <Label htmlFor="message" md={2}>
+              <Label htmlFor="comment" md={2}>
                 <strong>comment</strong>
               </Label>
               <Row className="form-group mr-1 ml-1">
                 <Control.textarea
-                  model=".message"
-                  id="message"
-                  name="message"
+                  model=".comment"
+                  id="comment"
+                  name="comment"
                   rows="6"
                   className="form-control"
                 />
@@ -197,7 +203,11 @@ const DishDetail = (props) => {
           <RenderDish dish={props.dish} />
         </div>
         <div className="col-12 col-md-5 m-1">
-          <RenderComments comments={props.comments} />
+          <RenderComments
+            comments={props.comments}
+            addComment={props.addComment}
+            dishId={props.dish.id}
+          />
         </div>
       </div>
     </div>
