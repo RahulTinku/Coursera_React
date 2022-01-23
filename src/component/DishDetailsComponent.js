@@ -27,10 +27,10 @@ const isNumber = (val) => !isNaN(Number(val));
 const validEmail = (val) =>
   /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val);
 
-function RenderComments({ comments, addComment, dishId }) {
+function RenderComments({ comments, postComment, dishId }) {
   const allComments = comments.map((comment) => {
     return (
-      <li key={comment.author}>
+      <li key={comment.id}>
         <p>{comment.comment}</p>
         <p>
           -- {comment.author},{' '}
@@ -50,7 +50,7 @@ function RenderComments({ comments, addComment, dishId }) {
     <div>
       <h4>Comments</h4>
       <ul className="list-unstyled">{allComments}</ul>
-      <CommentForm dishId={dishId} addComment={addComment} />
+      <CommentForm dishId={dishId} postComment={postComment} />
     </div>
   );
 }
@@ -73,7 +73,7 @@ class CommentForm extends Component {
 
   handleSubmit(values) {
     this.toggleModal();
-    this.props.addComment(
+    this.props.postComment(
       this.props.dishId,
       values.rating,
       values.author,
@@ -224,7 +224,7 @@ const DishDetail = (props) => {
           <div className="col-12 col-md-5 m-1">
             <RenderComments
               comments={props.comments}
-              addComment={props.addComment}
+              postComment={props.postComment}
               dishId={props.dish.id}
             />
           </div>
