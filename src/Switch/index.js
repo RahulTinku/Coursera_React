@@ -12,7 +12,7 @@ const Switch = () => {
       />
       <span className="slider round" />
     </label>
-  );
+  ); 
 };
 
 export default Switch;
