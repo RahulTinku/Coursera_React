@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { validateEmail } from "./utils";
 
 const PasswordErrorMessage = () => {
@@ -20,7 +20,6 @@ function App() {
   const [role, setRole] = useState("role");
 
   const getIsFormValid = () => {
-    // Implement this function
     if(firstName && validateEmail(email) && password.value.length >= 8 && (role === "individual" || role === "business")){
       return true;
     }
@@ -72,7 +71,15 @@ function App() {
             <label>
               Password <sup>*</sup>
             </label>
-            <input placeholder="Password" type="password" value={password.value} onChange={(e)=>  setPassword({value :e.target.value, isTouched: true})}/>
+            <input 
+              placeholder="Password" 
+              type="password" 
+              value={password.value} 
+              onChange={(e)=>  setPassword({...password, value :e.target.value})}
+              onBlur={() => { 
+                setPassword({ ...password, isTouched: true }); 
+              }} 
+              />
             {password.isTouched && password.value.length < 8 ? PasswordErrorMessage() : null}
           </div>
           <div className="Field">
