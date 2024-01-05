@@ -8,7 +8,6 @@ const PasswordErrorMessage = () => {
   );
 };
 
-
 function App() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
